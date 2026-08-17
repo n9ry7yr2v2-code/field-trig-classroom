@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<title>Field Trig V4</title>
+<style>
+:root{--bg:#0d1117;--p:#171d25;--p2:#202832;--t:#f6f8fb;--m:#9ba7b6;--a:#f2b84b;--g:#5cc58c;--r:#ef7272;--b:#69a7ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:900px;margin:auto;padding-bottom:92px}
+header{position:sticky;top:0;z-index:8;background:#0d1117ee;backdrop-filter:blur(12px);padding:calc(12px + env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid #28313c}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:950}.brand span,.k,.answer{color:var(--a)}.muted{color:var(--m)}main{padding:16px}.screen{display:none}.screen.active{display:block}
+.card{background:var(--p);border:1px solid #29323d;border-radius:18px;padding:16px;margin-bottom:14px}.hero h1{font-size:1.55rem;margin:.35rem 0}.k{font-size:.74rem;text-transform:uppercase;letter-spacing:.09em;font-weight:850}
+.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:850;background:var(--a);color:#1b160e;font-size:.96rem}.btn.alt{background:var(--p2);color:var(--t);border:1px solid #394555}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--p2);border:1px solid #303947;border-radius:14px;padding:12px}.stat b{display:block;font-size:1.08rem;margin-top:4px}
+.tool{border-left:4px solid var(--a)}.mission{border-left:4px solid var(--b)}.success{border-left:4px solid var(--g)}
+.formula{font-family:ui-monospace,Menlo,monospace;background:#10151b;border:1px solid #2d3642;border-radius:12px;padding:11px;line-height:1.55}.tip{background:#222a34;border-radius:12px;padding:12px;line-height:1.45}
+label{display:block;color:var(--m);font-size:.8rem;margin:9px 0}input,select{width:100%;background:#10151b;color:var(--t);border:1px solid #354152;border-radius:10px;padding:12px;font-size:1rem}
+.jobs{display:grid;gap:10px}.job{background:var(--p2);border:1px solid #354152;border-radius:15px;padding:14px;text-align:left;color:var(--t)}.job b{display:block;margin-bottom:4px}.job small{color:var(--m)}
+.diagram{background:#10151b;border:1px solid #2c3541;border-radius:15px;padding:8px}svg{width:100%;height:auto}.choice{display:block;width:100%;text-align:left;margin:8px 0;background:var(--p2);color:var(--t);border:1px solid #354152;border-radius:12px;padding:12px;font-size:1rem}.choice.correct{border-color:var(--g);background:#183225}.choice.wrong{border-color:var(--r);background:#351f1f}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:9;background:#0d1117f5;border-top:1px solid #28313c;padding-bottom:env(safe-area-inset-bottom)}.inner{max-width:900px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr)}.nav{border:0;background:none;color:var(--m);padding:9px 2px 11px;font-size:.68rem}.nav strong{display:block;font-size:1.05rem}.nav.active{color:var(--a)}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<div class="app"><header><div class="top"><div><div class="brand">FIELD <span>TRIG</span> V4</div><div class="muted">Classroom + Field Mode</div></div><div>🦺</div></div></header><main>
+
+<section id="home" class="screen active">
+<div class="card hero"><div class="k">V4 · Field Mode</div><h1>What are you trying to lay out?</h1><p class="muted">Start with the job instead of the formula. Field Trig will show you what math is hiding inside it.</p><button class="btn" onclick="show('field')">Open Field Mode</button></div>
+<div class="card"><div class="k">Classroom</div><h2>Learn the why</h2><p>Squaring, angles, SOH-CAH-TOA, slope, parking layouts and radiuses — taught with tape-measure examples.</p><button class="btn alt" onclick="show('learn')">Go to Classroom</button></div>
+<div class="card mission"><div class="k">Today's challenge</div><h3>36' island, 6' bulge</h3><p>Find the radius and the swing point for the same kind of half-moon curve you'd lay out in a parking lot.</p><button class="btn alt" onclick="openJob('radius')">Solve It</button></div>
+</section>
+
+<section id="field" class="screen">
+<div class="card"><div class="k">Field Mode</div><h2>Pick the job</h2><p class="muted">No need to know the trig formula first.</p>
+<div class="jobs">
+<button class="job" onclick="openJob('square')"><b>▣ Square a layout</b><small>Two sides → target diagonal</small></button>
+<button class="job" onclick="openJob('grade')"><b>↗ Find slope / grade</b><small>Run + rise → grade, angle, inches per foot</small></button>
+<button class="job" onclick="openJob('parking')"><b>▤ Lay out angled parking</b><small>Stall width + angle → baseline spacing</small></button>
+<button class="job" onclick="openJob('radius')"><b>◠ Lay out a radius / island</b><small>Chord + center bulge → radius + swing point</small></button>
+<button class="job" onclick="openJob('height')"><b>△ Find an unknown height</b><small>Distance + angle → height</small></button>
+</div></div></section>
+
+<section id="job" class="screen"><div id="jobBox"></div></section>
+
+<section id="learn" class="screen">
+<div class="card"><div class="k">Lesson 1</div><h2>The triangle hiding in the job</h2><p>Most field trig starts by finding a right triangle inside the layout.</p><div class="diagram"><svg viewBox="0 0 500 260"><path d="M70 215H420M70 215V60M70 60L420 215" fill="none" stroke="#f6f8fb" stroke-width="6"/><path d="M70 60L420 215" stroke="#f2b84b" stroke-width="6"/><rect x="70" y="185" width="30" height="30" fill="none" stroke="#9ba7b6" stroke-width="3"/></svg></div><div class="tip"><b>Think:</b> What do I know? What am I trying to find? Which two measurements form the triangle?</div></div>
+<div class="card"><div class="k">Core tools</div><div class="formula">Square/diagonal: a² + b² = c²<br><br>Grade: rise ÷ run × 100<br><br>Angle: tan⁻¹(rise ÷ run)<br><br>Unknown height: tan(angle) × run<br><br>Radius: c²/(8s) + s/2</div></div>
+</section>
+
+<section id="drill" class="screen"><div class="card"><div class="k">Job-Site Drill</div><h2>Choose the move</h2><div id="quizBox"></div></div></section>
+
+</main></div>
+<div class="bottom"><div class="inner">
+<button class="nav active" data-s="home"><strong>⌂</strong>Home</button>
+<button class="nav" data-s="field"><strong>🦺</strong>Field</button>
+<button class="nav" data-s="learn"><strong>△</strong>Learn</button>
+<button class="nav" data-s="drill"><strong>✓</strong>Drill</button>
+<button class="nav" onclick="openJob('radius')"><strong>◠</strong>Radius</button>
+</div></div>
+
+<script>
+const $=x=>document.getElementById(x);
+function show(s){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.s===s));if(s==='drill')renderQuiz();scrollTo(0,0)}
+document.querySelectorAll('.nav[data-s]').forEach(x=>x.onclick=()=>show(x.dataset.s));
+function ft(x){return isFinite(x)?x.toFixed(2)+' ft':'—'}
+function openJob(type){show('job');let b=$('jobBox');
+if(type==='square')b.innerHTML=`<div class="card tool"><div class="k">Square a layout</div><h2>Target diagonal</h2><label>Side A (ft)<input id="a" type="number" value="12" step=".25"></label><label>Side B (ft)<input id="b" type="number" value="20" step=".25"></label><div class="stat"><span class="muted">Diagonal you want</span><b id="out"></b></div><div class="tip">Pull this diagonal corner-to-corner. On a rectangle, check both diagonals — they should match.</div></div>`;
+if(type==='grade')b.innerHTML=`<div class="card tool"><div class="k">Slope / Grade</div><h2>Turn elevation into useful numbers</h2><label>Horizontal run (ft)<input id="a" type="number" value="20" step=".25"></label><label>Rise or fall (ft)<input id="b" type="number" value="1" step=".125"></label><div class="grid"><div class="stat"><span class="muted">Grade</span><b id="out"></b></div><div class="stat"><span class="muted">Angle</span><b id="out2"></b></div><div class="stat"><span class="muted">Inches / ft</span><b id="out3"></b></div></div></div>`;
+if(type==='parking')b.innerHTML=`<div class="card tool"><div class="k">Angled parking</div><h2>Baseline spacing</h2><label>Stall width perpendicular to stripe (ft)<input id="a" type="number" value="9" step=".25"></label><label>Stripe angle from baseline (°)<input id="b" type="number" value="60" step="1"></label><div class="grid"><div class="stat"><span class="muted">Mark spacing on baseline</span><b id="out"></b></div><div class="stat"><span class="muted">10 stalls</span><b id="out2"></b></div></div><div class="tip">This converts the true stall width into the longer distance you mark along the curb/baseline.</div></div>`;
+if(type==='radius')b.innerHTML=`<div class="card tool"><div class="k">Radius / Island</div><h2>Chord + center bulge</h2><label>Straight chord length (ft)<input id="a" type="number" value="36" step=".25"></label><label>Bulge at middle (ft)<input id="b" type="number" value="6" step=".25"></label><div class="grid"><div class="stat"><span class="muted">Radius</span><b id="out"></b></div><div class="stat"><span class="muted">Swing point behind chord</span><b id="out2"></b></div></div><div class="tip">For 36' × 6', mark the midpoint of the 36' chord, go straight back the swing-point distance, and swing the calculated radius through both ends.</div></div>`;
+if(type==='height')b.innerHTML=`<div class="card tool"><div class="k">Unknown height</div><h2>Distance + angle</h2><label>Horizontal distance (ft)<input id="a" type="number" value="30" step=".25"></label><label>Angle up (°)<input id="b" type="number" value="25" step=".5"></label><div class="stat"><span class="muted">Height above your eye / instrument</span><b id="out"></b></div><div class="tip">Add your eye or instrument height if measuring from ground level.</div></div>`;
+let a=$('a'),bb=$('b'); function calc(){let x=+a.value,y=+bb.value;
+if(type==='square')$('out').textContent=ft(Math.hypot(x,y));
+if(type==='grade'){ $('out').textContent=(y/x*100).toFixed(2)+'%'; $('out2').textContent=(Math.atan2(y,x)*180/Math.PI).toFixed(2)+'°'; $('out3').textContent=(y/x*12).toFixed(3)+' in/ft';}
+if(type==='parking'){let s=x/Math.sin(y*Math.PI/180);$('out').textContent=ft(s);$('out2').textContent=ft(s*10);}
+if(type==='radius'){let R=x*x/(8*y)+y/2;$('out').textContent=ft(R);$('out2').textContent=ft(R-y);}
+if(type==='height')$('out').textContent=ft(Math.tan(y*Math.PI/180)*x);
+}a.oninput=bb.oninput=calc;calc();}
+let qi=0,qs=[
+["You're laying out a 12' × 20' rectangle. What measurement proves the corner?",["The diagonal","The perimeter","The area"],0,"The diagonal ties both sides together and checks the 90° geometry."],
+["A 6-8-10 triangle measures 10' 3\" across the diagonal. What do you move?",["Change the 6' mark","Change the 8' mark","Move the angle until the diagonal is 10'"],2,"Keep the side marks fixed. Adjust the corner."],
+["You fall 1' over a 20' run. What's the grade?",["5%","20%","0.5%"],0,"1 ÷ 20 × 100 = 5%."],
+["A 36' chord bows out 6' at center. Which tool do you need?",["SOH","Chord + sagitta radius","Area"],1,"Chord and sagitta determine the circle radius."]
+];
+function renderQuiz(){let q=qs[qi%qs.length];$('quizBox').innerHTML='<div class="muted">Question '+(qi%qs.length+1)+' of '+qs.length+'</div><h3>'+q[0]+'</h3>'+q[1].map((v,i)=>'<button class="choice" data-i="'+i+'">'+v+'</button>').join('')+'<div id="fb"></div>';document.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{let i=+b.dataset.i,all=document.querySelectorAll('.choice');all.forEach(x=>x.disabled=true);b.classList.add(i===q[2]?'correct':'wrong');all[q[2]].classList.add('correct');$('fb').innerHTML='<p>'+q[3]+'</p><button class="btn" id="next">Next Job</button>';$('next').onclick=()=>{qi++;renderQuiz()}})}
+</script></body></html>
