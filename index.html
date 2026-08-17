@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Field Trig</title>
+<style>
+:root{
+  --bg:#0d1117;--panel:#171d25;--panel2:#202832;--text:#f6f8fb;--muted:#9ba7b6;
+  --accent:#f2b84b;--good:#5cc58c;--bad:#ef7272;--blue:#69a7ff;--line:#313b49
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{min-height:100vh}
+.app{max-width:960px;margin:0 auto;padding-bottom:96px}
+header{position:sticky;top:0;z-index:20;background:rgba(13,17,23,.94);backdrop-filter:blur(14px);border-bottom:1px solid #252d37;padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{font-weight:950;letter-spacing:.4px}.brand span{color:var(--accent)}
+.sub,.muted,.notice{color:var(--muted)}
+main{padding:16px}
+.screen{display:none}.screen.active{display:block}
+.card{background:var(--panel);border:1px solid #29323d;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 10px 26px rgba(0,0,0,.15)}
+.hero h1{font-size:1.62rem;margin:.3rem 0 .55rem}.hero p{line-height:1.5}
+.kicker{font-size:.75rem;text-transform:uppercase;letter-spacing:.09em;font-weight:850;color:var(--accent)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:850;background:var(--accent);color:#1b160e;font-size:.96rem}
+.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid #394555}
+.btn.blue{background:var(--blue);color:#09111d}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--panel2);border:1px solid #303947;border-radius:14px;padding:12px}
+.stat b{display:block;font-size:1.08rem;margin-top:4px}
+.progress{height:10px;background:#2b333e;border-radius:999px;overflow:hidden;margin-top:12px}.progress>div{height:100%;background:var(--accent);transition:width .3s}
+.lesson{display:flex;gap:10px;align-items:center;border-top:1px solid #2a333e;padding:12px 0}.lesson:first-child{border-top:0}
+.badge{width:38px;height:38px;border-radius:11px;background:#27303b;display:grid;place-items:center;color:var(--accent);font-weight:900;flex:0 0 auto}
+.meta{flex:1}.meta b,.meta span{display:block}.meta span{font-size:.83rem;color:var(--muted)}
+.tag{font-size:.7rem;padding:5px 8px;border-radius:999px;background:#28313b;color:#cbd3dc}.tag.done{background:#173426;color:#9fe0b9}.tag.current{background:#3a2c13;color:#ffd98c}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#10151b;border:1px solid #2d3642;border-radius:12px;padding:11px;line-height:1.55}
+.tip{background:#222a34;border-radius:12px;padding:12px;line-height:1.5}
+.mission{border-left:4px solid var(--accent)}.success{border-left:4px solid var(--good)}.fieldcard{border-left:4px solid var(--blue)}
+.diagram{background:#10151b;border:1px solid #2c3541;border-radius:15px;padding:8px;overflow:hidden}
+svg{width:100%;height:auto;display:block}
+label{display:block;color:var(--muted);font-size:.8rem;margin:9px 0}
+input,select{width:100%;background:#10151b;color:var(--text);border:1px solid #354152;border-radius:10px;padding:11px;font-size:1rem}
+input[type=range]{padding:0;height:36px}
+.choice{display:block;width:100%;text-align:left;margin:8px 0;background:var(--panel2);color:var(--text);border:1px solid #354152;border-radius:12px;padding:12px;font-size:1rem}
+.choice.correct{border-color:var(--good);background:#183225}.choice.wrong{border-color:var(--bad);background:#351f1f}
+.jobs{display:grid;gap:10px}.job{background:var(--panel2);border:1px solid #354152;border-radius:15px;padding:14px;text-align:left;color:var(--text)}.job b{display:block;margin-bottom:4px}.job small{color:var(--muted)}
+.answer{font-size:1.18rem;font-weight:900;color:var(--accent);margin-top:10px}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(13,17,23,.96);backdrop-filter:blur(14px);border-top:1px solid #28313c;padding-bottom:env(safe-area-inset-bottom)}
+.bottom .inner{max-width:960px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.nav{border:0;background:none;color:var(--muted);padding:9px 2px 11px;font-size:.68rem}.nav strong{display:block;font-size:1.05rem}.nav.active{color:var(--accent)}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:4px}.tabbtn{white-space:nowrap;background:var(--panel2);color:var(--text);border:1px solid #354152;border-radius:999px;padding:8px 11px}
+.callout{font-size:.88rem;color:var(--muted);margin-top:8px}
+@media(max-width:620px){.grid,.grid3{grid-template-columns:1fr}.hero h1{font-size:1.45rem}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="top">
+<div><div class="brand">FIELD <span>TRIG</span></div><div class="sub">Classroom · Simulators · Field Mode</div></div>
+<div class="tag" id="xp">0 XP</div>
+</div></header>
+
+<main>
+
+<section id="home" class="screen active">
+  <div class="card hero">
+    <div class="kicker">Cumulative Build</div>
+    <h1>Learn the math. See it move. Use it on the job.</h1>
+    <p class="muted">This version combines the classroom, earlier tools, Field Mode, and the new moving visual layouts into one app.</p>
+    <div class="row">
+      <button class="btn" id="continueBtn">Continue Course</button>
+      <button class="btn secondary" onclick="show('field')">Open Field Mode</button>
+    </div>
+    <div class="progress"><div id="courseBar" style="width:20%"></div></div>
+    <div class="notice">Course progress: <span id="courseProgress">20%</span></div>
+  </div>
+
+  <div class="grid">
+    <div class="stat"><span class="muted">Current lesson</span><b id="currentLesson">Lesson 1</b></div>
+    <div class="stat"><span class="muted">Next skill</span><b id="nextSkill">Square a layout</b></div>
+  </div>
+
+  <div class="card mission">
+    <div class="kicker">Next Mission</div>
+    <h3 id="missionTitle">Square a rectangle</h3>
+    <p id="missionText">Start with the diagonal and learn why it proves a rectangle is square.</p>
+    <button class="btn secondary" id="missionBtn">Open Mission</button>
+  </div>
+
+  <div class="card">
+    <b>Course Roadmap</b>
+    <div class="lesson"><div class="badge">1</div><div class="meta"><b>Right Triangles & Squaring</b><span>Diagonals, Pythagorean theorem</span></div><div id="tag1" class="tag current">START</div></div>
+    <div class="lesson"><div class="badge">2</div><div class="meta"><b>3-4-5 Field Layout</b><span>Build a 90° corner with a tape</span></div><div id="tag2" class="tag">NEXT</div></div>
+    <div class="lesson"><div class="badge">3</div><div class="meta"><b>Angles & SOH-CAH-TOA</b><span>Turn measurements into angles and lengths</span></div><div id="tag3" class="tag">NEXT</div></div>
+    <div class="lesson"><div class="badge">4</div><div class="meta"><b>Slope & Grade</b><span>Rise/run, drainage, ramps</span></div></div>
+    <div class="lesson"><div class="badge">5</div><div class="meta"><b>Parking Lot Layout</b><span>Angled stalls and offsets</span></div></div>
+    <div class="lesson"><div class="badge">6</div><div class="meta"><b>Radius & Curves</b><span>Chord, sagitta, swing points</span></div></div>
+  </div>
+</section>
+
+<section id="classroom" class="screen">
+  <div class="card"><div class="tabs">
+    <button class="tabbtn" onclick="openLesson(1)">Lesson 1</button>
+    <button class="tabbtn" onclick="openLesson(2)">Lesson 2</button>
+    <button class="tabbtn" onclick="openLesson(3)">Lesson 3</button>
+    <button class="tabbtn" onclick="openLesson(4)">Lesson 4</button>
+  </div></div>
+
+  <div id="lesson1" class="lessonPanel">
+    <div class="card">
+      <div class="kicker">Lesson 1</div><h2>Right triangles are everywhere</h2>
+      <p class="muted">The diagonal is the truth check.</p>
+      <div class="diagram"><svg viewBox="0 0 500 270">
+        <line x1="70" y1="220" x2="400" y2="220" stroke="#f6f8fb" stroke-width="6"/>
+        <line x1="70" y1="220" x2="70" y2="65" stroke="#f6f8fb" stroke-width="6"/>
+        <line x1="70" y1="65" x2="400" y2="220" stroke="#f2b84b" stroke-width="6"/>
+        <rect x="70" y="190" width="30" height="30" fill="none" stroke="#9ba7b6" stroke-width="3"/>
+        <text x="210" y="248" fill="#9ba7b6" font-size="20">20 ft</text>
+        <text x="20" y="145" fill="#9ba7b6" font-size="20">12 ft</text>
+      </svg></div>
+      <div class="formula">a² + b² = c²<br>12² + 20² = 544<br>c = 23.324 ft ≈ 23' 3 7/8"</div>
+      <div class="tip"><b>Field meaning:</b> if the sides are correct and both diagonals match, the rectangle is square.</div>
+    </div>
+    <div class="card mission"><h3>Field Assignment</h3><p>Lay out 12' × 20'. Pull both diagonals and adjust until they agree.</p><button class="btn" id="done1">Complete Lesson 1 +50 XP</button></div>
+  </div>
+
+  <div id="lesson2" class="lessonPanel" style="display:none">
+    <div class="card"><div class="kicker">Lesson 2</div><h2>3-4-5 is a tape-measure 90°</h2>
+      <div class="formula">3² + 4² = 5²<br>Scaled up: 6² + 8² = 10²</div>
+      <div class="tip">Mark 6' on one line and 8' on the other. Move the corner until those two marks are exactly 10' apart.</div>
+      <button class="btn secondary" onclick="show('simulators');openSim('square')">Open Squaring Simulator</button>
+    </div>
+    <div class="card mission"><button class="btn" id="done2">Complete Lesson 2 +75 XP</button></div>
+  </div>
+
+  <div id="lesson3" class="lessonPanel" style="display:none">
+    <div class="card"><div class="kicker">Lesson 3</div><h2>SOH-CAH-TOA without the school fog</h2>
+      <div class="formula">SOH → sin = opposite / hypotenuse<br>CAH → cos = adjacent / hypotenuse<br>TOA → tan = opposite / adjacent</div>
+      <p>If you know rise and run, tangent is the one you're already using:</p>
+      <div class="formula">tan(angle) = rise / run<br>angle = tan⁻¹(rise / run)</div>
+      <div class="tip"><b>Field translation:</b> rise = opposite, run = adjacent. If you know those two, tangent gives the angle.</div>
+    </div>
+    <div class="card mission"><button class="btn" id="done3">Complete Lesson 3 +100 XP</button></div>
+  </div>
+
+  <div id="lesson4" class="lessonPanel" style="display:none">
+    <div class="card"><div class="kicker">Lesson 4</div><h2>Slope & Grade</h2>
+      <div class="formula">grade % = rise ÷ run × 100</div>
+      <p>A 1' fall over 20' is:</p><div class="formula">1 ÷ 20 × 100 = 5%</div>
+      <div class="tip">You can also convert the same slope to degrees and inches per foot in the Triangle Lab.</div>
+      <button class="btn secondary" onclick="show('simulators');openSim('triangle')">Open Triangle Lab</button>
+    </div>
+  </div>
+</section>
+
+<section id="simulators" class="screen">
+  <div class="card"><div class="tabs">
+    <button class="tabbtn" onclick="openSim('square')">Squaring</button>
+    <button class="tabbtn" onclick="openSim('triangle')">Triangle</button>
+    <button class="tabbtn" onclick="openSim('parking')">Parking</button>
+    <button class="tabbtn" onclick="openSim('radius')">Radius</button>
+  </div></div>
+
+  <div id="sim-square" class="simPanel">
+    <div class="card">
+      <div class="kicker">Moving Visual</div><h2>6-8-10 Squaring Simulator</h2>
+      <div class="diagram"><svg viewBox="0 0 520 350">
+        <line x1="75" y1="290" x2="455" y2="290" stroke="#f6f8fb" stroke-width="6"/>
+        <line id="sqSide" x1="75" y1="290" x2="140" y2="65" stroke="#f6f8fb" stroke-width="6"/>
+        <line id="sqDiag" x1="140" y1="65" x2="455" y2="290" stroke="#f2b84b" stroke-width="6"/>
+        <circle id="sqDot" cx="140" cy="65" r="8" fill="#69a7ff"/>
+      </svg></div>
+      <label>Move the corner angle<input id="sqAngle" type="range" min="70" max="110" step=".1" value="84"></label>
+      <div class="grid"><div class="stat"><span class="muted">Angle</span><b id="sqAngleOut"></b></div><div class="stat"><span class="muted">Diagonal</span><b id="sqDiagOut"></b></div></div>
+      <div class="tip" id="sqMessage"></div>
+    </div>
+  </div>
+
+  <div id="sim-triangle" class="simPanel" style="display:none">
+    <div class="card">
+      <div class="kicker">Moving Visual</div><h2>Triangle / Grade Lab</h2>
+      <div class="diagram"><svg viewBox="0 0 520 330">
+        <line id="triBase" x1="65" y1="270" x2="455" y2="270" stroke="#f6f8fb" stroke-width="6"/>
+        <line id="triRise" x1="65" y1="270" x2="65" y2="150" stroke="#f6f8fb" stroke-width="6"/>
+        <line id="triHyp" x1="65" y1="150" x2="455" y2="270" stroke="#f2b84b" stroke-width="6"/>
+      </svg></div>
+      <label>Run (ft)<input id="triRun" type="number" value="20" step=".25"></label>
+      <label>Rise (ft)<input id="triRiseIn" type="number" value="3" step=".125"></label>
+      <div class="grid"><div class="stat"><span class="muted">Diagonal</span><b id="triHypOut"></b></div><div class="stat"><span class="muted">Angle</span><b id="triAngleOut"></b></div><div class="stat"><span class="muted">Grade</span><b id="triGradeOut"></b></div><div class="stat"><span class="muted">Inches / ft</span><b id="triPerFtOut"></b></div></div>
+    </div>
+  </div>
+
+  <div id="sim-parking" class="simPanel" style="display:none">
+    <div class="card">
+      <div class="kicker">Moving Visual</div><h2>Angled Parking Layout</h2>
+      <p class="muted">Change the stripe angle and watch the stalls rotate while the baseline spacing updates.</p>
+      <div class="diagram"><svg viewBox="0 0 600 330">
+        <line x1="40" y1="285" x2="560" y2="285" stroke="#9ba7b6" stroke-width="5"/>
+        <g id="parkingLines"></g>
+      </svg></div>
+      <label>Stall width perpendicular to stripe (ft)<input id="parkWidth" type="number" value="9" step=".25"></label>
+      <label>Stripe angle from baseline (°)<input id="parkAngle" type="range" min="30" max="90" step="1" value="60"></label>
+      <div class="grid"><div class="stat"><span class="muted">Angle</span><b id="parkAngleOut"></b></div><div class="stat"><span class="muted">Baseline spacing</span><b id="parkSpacingOut"></b></div><div class="stat"><span class="muted">10 stalls</span><b id="parkTenOut"></b></div></div>
+    </div>
+  </div>
+
+  <div id="sim-radius" class="simPanel" style="display:none">
+    <div class="card">
+      <div class="kicker">Moving Visual</div><h2>Chord + Bulge Radius</h2>
+      <p class="muted">Change the chord and bulge. The curve visibly deepens or flattens.</p>
+      <div class="diagram"><svg viewBox="0 0 600 340">
+        <line id="radChord" x1="90" y1="260" x2="510" y2="260" stroke="#f6f8fb" stroke-width="5"/>
+        <path id="radArc" d="" fill="none" stroke="#f2b84b" stroke-width="7"/>
+        <line id="radCenterLine" x1="300" y1="260" x2="300" y2="190" stroke="#69a7ff" stroke-width="3" stroke-dasharray="8 8"/>
+        <circle id="radCenterDot" cx="300" cy="190" r="7" fill="#69a7ff"/>
+      </svg></div>
+      <label>Chord length (ft)<input id="radChordIn" type="number" value="36" step=".25"></label>
+      <label>Bulge / sagitta (ft)<input id="radSagIn" type="number" value="6" step=".25"></label>
+      <div class="grid"><div class="stat"><span class="muted">Radius</span><b id="radRadiusOut"></b></div><div class="stat"><span class="muted">Swing point behind chord</span><b id="radOffsetOut"></b></div></div>
+      <div class="tip" id="radTip"></div>
+    </div>
+  </div>
+</section>
+
+<section id="field" class="screen">
+  <div class="card fieldcard"><div class="kicker">Field Mode</div><h2>What are you trying to do?</h2><p class="muted">Start with the job, not the formula.</p>
+    <div class="jobs">
+      <button class="job" onclick="openFieldJob('square')"><b>▣ Square a layout</b><small>Two sides → target diagonal</small></button>
+      <button class="job" onclick="openFieldJob('grade')"><b>↗ Find slope / grade</b><small>Run + rise → grade, angle, inches per foot</small></button>
+      <button class="job" onclick="openFieldJob('parking')"><b>▤ Lay out angled parking</b><small>Width + angle → baseline spacing</small></button>
+      <button class="job" onclick="openFieldJob('radius')"><b>◠ Lay out a radius / island</b><small>Chord + bulge → radius + swing point</small></button>
+      <button class="job" onclick="openFieldJob('height')"><b>△ Find an unknown height</b><small>Distance + angle → height</small></button>
+    </div>
+  </div>
+  <div id="fieldJobBox"></div>
+</section>
+
+<section id="practice" class="screen">
+  <div class="card"><div class="kicker">Practice</div><h2>Job-Site Drill</h2><div id="quizBox"></div></div>
+</section>
+
+</main>
+</div>
+
+<div class="bottom"><div class="inner">
+<button class="nav active" data-screen="home"><strong>⌂</strong>Home</button>
+<button class="nav" data-screen="classroom"><strong>▤</strong>Learn</button>
+<button class="nav" data-screen="simulators"><strong>△</strong>Sim</button>
+<button class="nav" data-screen="field"><strong>🦺</strong>Field</button>
+<button class="nav" data-screen="practice"><strong>✓</strong>Drill</button>
+</div></div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+let xp=parseInt(localStorage.getItem('fieldTrigXP')||'0',10);
+let d1=localStorage.getItem('fieldTrigLesson1')==='done'||localStorage.getItem('fieldTrigAssignment1')==='done';
+let d2=localStorage.getItem('fieldTrigLesson2')==='done';
+let d3=localStorage.getItem('fieldTrigLesson3')==='done';
+
+function setXP(n){xp=n;localStorage.setItem('fieldTrigXP',String(n));$('xp').textContent=n+' XP'}
+function show(id){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  $(id).classList.add('active');
+  document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.screen===id));
+  if(id==='practice')renderQuiz();
+  window.scrollTo(0,0);
+}
+window.show=show;
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>show(b.dataset.screen)));
+
+function updateCourse(){
+  let p=d3?48:d2?36:d1?24:16;
+  $('courseBar').style.width=p+'%'; $('courseProgress').textContent=p+'%';
+  $('tag1').textContent=d1?'DONE':'START'; $('tag1').className='tag '+(d1?'done':'current');
+  $('tag2').textContent=d2?'DONE':d1?'CURRENT':'NEXT'; $('tag2').className='tag '+(d2?'done':d1?'current':'');
+  $('tag3').textContent=d3?'DONE':d2?'CURRENT':'NEXT'; $('tag3').className='tag '+(d3?'done':d2?'current':'');
+  $('currentLesson').textContent=d3?'Lesson 4':d2?'Lesson 3':d1?'Lesson 2':'Lesson 1';
+  $('nextSkill').textContent=d3?'Slope & grade':d2?'SOH-CAH-TOA':d1?'Build a 90° corner':'Square a layout';
+  if(d3){$('missionTitle').textContent='Read slope like a pro';$('missionText').textContent='Use the Triangle Lab to move between rise, run, grade and angle.'}
+  else if(d2){$('missionTitle').textContent='Turn measurements into angles';$('missionText').textContent='Start Lesson 3 and connect tangent to rise/run.'}
+  else if(d1){$('missionTitle').textContent='Build a 90° corner';$('missionText').textContent='Use 6-8-10 and hit a 10 ft diagonal.'}
+}
+$('continueBtn').onclick=()=>{show('classroom');openLesson(d3?4:d2?3:d1?2:1)};
+$('missionBtn').onclick=()=>{show('classroom');openLesson(d3?4:d2?3:d1?2:1)};
+
+window.openLesson=function(n){
+  document.querySelectorAll('.lessonPanel').forEach(x=>x.style.display='none');
+  $('lesson'+n).style.display='block';
+}
+$('done1').onclick=()=>{if(!d1){d1=true;localStorage.setItem('fieldTrigLesson1','done');setXP(xp+50);updateCourse()}$('done1').textContent='Lesson 1 Complete'};
+$('done2').onclick=()=>{if(!d2){d2=true;localStorage.setItem('fieldTrigLesson2','done');setXP(xp+75);updateCourse()}$('done2').textContent='Lesson 2 Complete'};
+$('done3').onclick=()=>{if(!d3){d3=true;localStorage.setItem('fieldTrigLesson3','done');setXP(xp+100);updateCourse()}$('done3').textContent='Lesson 3 Complete'};
+
+window.openSim=function(name){
+  document.querySelectorAll('.simPanel').forEach(x=>x.style.display='none');
+  $('sim-'+name).style.display='block';
+  if(name==='parking')updateParking();
+  if(name==='radius')updateRadius();
+}
+
+function updateSquare(){
+  let A=+$('sqAngle').value,r=A*Math.PI/180,D=Math.sqrt(36+64-96*Math.cos(r));
+  $('sqAngleOut').textContent=A.toFixed(1)+'°'; $('sqDiagOut').textContent=D.toFixed(2)+' ft';
+  let sc=31,x=75+6*sc*Math.cos(r),y=290-6*sc*Math.sin(r);
+  $('sqSide').setAttribute('x2',x);$('sqSide').setAttribute('y2',y);
+  $('sqDiag').setAttribute('x1',x);$('sqDiag').setAttribute('y1',y);
+  $('sqDot').setAttribute('cx',x);$('sqDot').setAttribute('cy',y);
+  $('sqMessage').textContent=Math.abs(D-10)<.02?'✓ 10.00 ft — square corner.':D<10?'Diagonal is short → open the corner.':'Diagonal is long → close the corner.';
+}
+$('sqAngle').oninput=updateSquare;
+
+function updateTriangle(){
+  let run=Math.max(.1,+$('triRun').value),rise=Math.max(0,+$('triRiseIn').value);
+  let hyp=Math.hypot(run,rise),ang=Math.atan2(rise,run)*180/Math.PI,grade=rise/run*100;
+  $('triHypOut').textContent=hyp.toFixed(2)+' ft';$('triAngleOut').textContent=ang.toFixed(2)+'°';
+  $('triGradeOut').textContent=grade.toFixed(2)+'%';$('triPerFtOut').textContent=(rise/run*12).toFixed(3)+' in/ft';
+  let maxRun=40,maxRise=20;
+  let x2=65+Math.min(390,390*run/maxRun), y2=270-Math.min(190,190*rise/maxRise);
+  $('triBase').setAttribute('x2',x2);$('triRise').setAttribute('y2',y2);
+  $('triHyp').setAttribute('y1',y2);$('triHyp').setAttribute('x2',x2);
+}
+$('triRun').oninput=$('triRiseIn').oninput=updateTriangle;
+
+function updateParking(){
+  let w=Math.max(.1,+$('parkWidth').value),a=+$('parkAngle').value,rad=a*Math.PI/180;
+  let spacing=w/Math.sin(rad);
+  $('parkAngleOut').textContent=a.toFixed(0)+'°';$('parkSpacingOut').textContent=spacing.toFixed(2)+' ft';$('parkTenOut').textContent=(spacing*10).toFixed(1)+' ft';
+  let g=$('parkingLines'); g.innerHTML='';
+  let pxPerFt=10, base=60, usable=480, step=Math.max(38,Math.min(95,spacing*pxPerFt));
+  let len=165;
+  for(let x=base;x<=base+usable;x+=step){
+    let x2=x+len*Math.cos(rad), y2=285-len*Math.sin(rad);
+    let line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x);line.setAttribute('y1',285);line.setAttribute('x2',x2);line.setAttribute('y2',y2);
+    line.setAttribute('stroke','#f2b84b');line.setAttribute('stroke-width','5');g.appendChild(line);
+  }
+}
+$('parkWidth').oninput=$('parkAngle').oninput=updateParking;
+
+function updateRadius(){
+  let c=Math.max(.1,+$('radChordIn').value),s=Math.max(.05,+$('radSagIn').value),R=c*c/(8*s)+s/2,off=R-s;
+  $('radRadiusOut').textContent=R.toFixed(2)+' ft';$('radOffsetOut').textContent=off.toFixed(2)+' ft';
+  $('radTip').textContent='Midpoint the chord, go '+off.toFixed(2)+' ft straight back, then swing a '+R.toFixed(2)+' ft radius.';
+  let chordPx=420, x1=90,x2=510,baseY=260;
+  let sagPx=Math.max(12,Math.min(160, s/c*chordPx*2.2));
+  $('radArc').setAttribute('d',`M ${x1} ${baseY} Q 300 ${baseY-sagPx*2} ${x2} ${baseY}`);
+  $('radCenterLine').setAttribute('y2',baseY-Math.min(150,off/c*chordPx));
+  $('radCenterDot').setAttribute('cy',baseY-Math.min(150,off/c*chordPx));
+}
+$('radChordIn').oninput=$('radSagIn').oninput=updateRadius;
+
+window.openFieldJob=function(type){
+  let b=$('fieldJobBox');
+  if(type==='square') b.innerHTML=`<div class="card fieldcard"><div class="kicker">Square a layout</div><h2>Target diagonal</h2><label>Side A (ft)<input id="fa" type="number" value="12" step=".25"></label><label>Side B (ft)<input id="fb" type="number" value="20" step=".25"></label><div class="stat"><span class="muted">Diagonal</span><b id="fo"></b></div><div class="tip">Pull both diagonals on the finished rectangle. Matching diagonals = square.</div></div>`;
+  if(type==='grade') b.innerHTML=`<div class="card fieldcard"><div class="kicker">Slope / Grade</div><h2>Run + rise/fall</h2><label>Run (ft)<input id="fa" type="number" value="20" step=".25"></label><label>Rise or fall (ft)<input id="fb" type="number" value="1" step=".125"></label><div class="grid"><div class="stat"><span class="muted">Grade</span><b id="fo"></b></div><div class="stat"><span class="muted">Angle</span><b id="fo2"></b></div><div class="stat"><span class="muted">In/ft</span><b id="fo3"></b></div></div></div>`;
+  if(type==='parking') b.innerHTML=`<div class="card fieldcard"><div class="kicker">Angled Parking</div><h2>Baseline marks</h2><label>Stall width (ft)<input id="fa" type="number" value="9" step=".25"></label><label>Angle from baseline (°)<input id="fb" type="number" value="60" step="1"></label><div class="grid"><div class="stat"><span class="muted">Baseline spacing</span><b id="fo"></b></div><div class="stat"><span class="muted">10 stalls</span><b id="fo2"></b></div></div><button class="btn secondary" onclick="show('simulators');openSim('parking')">See it visually</button></div>`;
+  if(type==='radius') b.innerHTML=`<div class="card fieldcard"><div class="kicker">Radius / Island</div><h2>Chord + bulge</h2><label>Chord (ft)<input id="fa" type="number" value="36" step=".25"></label><label>Bulge (ft)<input id="fb" type="number" value="6" step=".25"></label><div class="grid"><div class="stat"><span class="muted">Radius</span><b id="fo"></b></div><div class="stat"><span class="muted">Swing point behind chord</span><b id="fo2"></b></div></div><button class="btn secondary" onclick="show('simulators');openSim('radius')">See the curve move</button></div>`;
+  if(type==='height') b.innerHTML=`<div class="card fieldcard"><div class="kicker">Unknown Height</div><h2>Distance + angle</h2><label>Horizontal distance (ft)<input id="fa" type="number" value="30" step=".25"></label><label>Angle up (°)<input id="fb" type="number" value="25" step=".5"></label><div class="stat"><span class="muted">Height above eye/instrument</span><b id="fo"></b></div><div class="tip">Add your eye or instrument height to get total height from ground.</div></div>`;
+  let a=$('fa'),bb=$('fb');
+  function calc(){
+    let x=+a.value,y=+bb.value;
+    if(type==='square') $('fo').textContent=Math.hypot(x,y).toFixed(2)+' ft';
+    if(type==='grade'){ $('fo').textContent=(y/x*100).toFixed(2)+'%';$('fo2').textContent=(Math.atan2(y,x)*180/Math.PI).toFixed(2)+'°';$('fo3').textContent=(y/x*12).toFixed(3)+' in/ft';}
+    if(type==='parking'){let s=x/Math.sin(y*Math.PI/180);$('fo').textContent=s.toFixed(2)+' ft';$('fo2').textContent=(s*10).toFixed(1)+' ft';}
+    if(type==='radius'){let R=x*x/(8*y)+y/2;$('fo').textContent=R.toFixed(2)+' ft';$('fo2').textContent=(R-y).toFixed(2)+' ft';}
+    if(type==='height') $('fo').textContent=(Math.tan(y*Math.PI/180)*x).toFixed(2)+' ft';
+  }
+  a.oninput=bb.oninput=calc; calc();
+  b.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+let qi=0;
+const qs=[
+  ["A 12' × 20' rectangle should have about what diagonal?",["20 ft","23.32 ft","32 ft"],1,"√(12² + 20²) ≈ 23.32 ft."],
+  ["Your 6' and 8' marks are 10' 3\" apart. What should you adjust?",["Change the 6' mark","Change the 8' mark","Move the corner until the diagonal is 10'"],2,"Keep the side marks fixed and move the angle."],
+  ["A 1' fall over 20' is what grade?",["5%","20%","0.5%"],0,"1 ÷ 20 × 100 = 5%."],
+  ["Which ratio gives angle from rise and run?",["Sine","Cosine","Tangent"],2,"tan(angle) = rise ÷ run."],
+  ["A 36' chord with a 6' bulge has what radius?",["24 ft","30 ft","36 ft"],1,"R = 36²/(8×6) + 6/2 = 30 ft."]
+];
+function renderQuiz(){
+  let q=qs[qi%qs.length];
+  $('quizBox').innerHTML='<div class="notice">Question '+(qi%qs.length+1)+' of '+qs.length+'</div><h3>'+q[0]+'</h3>'+q[1].map((v,i)=>'<button class="choice" data-i="'+i+'">'+v+'</button>').join('')+'<div id="quizFeedback"></div>';
+  document.querySelectorAll('#quizBox .choice').forEach(btn=>btn.onclick=()=>{
+    let i=+btn.dataset.i,all=document.querySelectorAll('#quizBox .choice'); all.forEach(x=>x.disabled=true);
+    btn.classList.add(i===q[2]?'correct':'wrong'); all[q[2]].classList.add('correct');
+    $('quizFeedback').innerHTML='<p>'+q[3]+'</p><button class="btn" id="nextQuiz">Next</button>';
+    $('nextQuiz').onclick=()=>{qi++;renderQuiz()}
+  });
+}
+
+setXP(xp);updateCourse();updateSquare();updateTriangle();updateParking();updateRadius();
+if(d1)$('done1').textContent='Lesson 1 Complete';
+if(d2)$('done2').textContent='Lesson 2 Complete';
+if(d3)$('done3').textContent='Lesson 3 Complete';
+})();
+</script>
+</body></html>
