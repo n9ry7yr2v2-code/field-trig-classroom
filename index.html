@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#11151b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Field Trig">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Field Trig Classroom</title>
+<style>
+:root{
+  --bg:#0d1117;--panel:#171d25;--panel2:#202832;--text:#f6f8fb;--muted:#9ba7b6;
+  --accent:#f2b84b;--accent2:#ffd77f;--line:#313b49;--good:#5cc58c;--bad:#ef7272;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{min-height:100vh}
+.app{max-width:850px;margin:0 auto;padding-bottom:92px}
+header{position:sticky;top:0;z-index:10;background:rgba(13,17,23,.94);backdrop-filter:blur(14px);border-bottom:1px solid #232b35;padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{font-weight:900;letter-spacing:.4px}.brand span{color:var(--accent)}
+.sub{font-size:.82rem;color:var(--muted);margin-top:2px}
+main{padding:16px}
+.card{background:var(--panel);border:1px solid #252e39;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 10px 26px rgba(0,0,0,.18)}
+.hero h1{font-size:1.6rem;margin:.25rem 0 .5rem}.hero p,.muted{color:var(--muted);line-height:1.45}
+.kicker{font-size:.76rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:800;background:var(--accent);color:#1b160e;font-size:.98rem}
+.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid #35404e}
+.btn:active{transform:translateY(1px)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--panel2);border:1px solid #303947;border-radius:14px;padding:13px}
+.stat b{display:block;font-size:1.15rem;margin-top:3px}
+.progress{height:9px;background:#2b333e;border-radius:999px;overflow:hidden;margin-top:11px}.progress>div{height:100%;background:var(--accent);width:14%}
+.lesson{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #28313c}.lesson:first-child{border-top:0}
+.badge{width:38px;height:38px;border-radius:11px;background:#27303b;display:grid;place-items:center;color:var(--accent);font-weight:900;flex:0 0 auto}
+.meta{flex:1}.meta b{display:block}.meta span{font-size:.85rem;color:var(--muted)}
+.tag{font-size:.72rem;padding:5px 8px;border-radius:999px;background:#28313b;color:#cbd3dc}
+.screen{display:none}.screen.active{display:block}
+.diagram{background:#10151b;border:1px solid #2c3541;border-radius:15px;padding:10px}
+svg{width:100%;height:auto;display:block}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#10151b;border:1px solid #2d3642;border-radius:12px;padding:11px;line-height:1.55}
+.tip{background:#222a34;border-radius:12px;padding:12px;line-height:1.45}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;color:var(--muted);font-size:.8rem}
+input{width:100%;margin-top:5px;border:1px solid #354152;background:#10151b;color:var(--text);padding:11px;border-radius:10px;font-size:1rem}
+.choice{display:block;width:100%;text-align:left;margin:8px 0;background:#202832;color:var(--text);border:1px solid #354152;border-radius:12px;padding:12px;font-size:1rem}
+.choice.correct{border-color:var(--good);background:#183225}.choice.wrong{border-color:var(--bad);background:#351f1f}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(13,17,23,.96);backdrop-filter:blur(14px);border-top:1px solid #28313c;padding-bottom:env(safe-area-inset-bottom);z-index:10}
+.bottom .inner{max-width:850px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.nav{border:0;background:none;color:var(--muted);padding:10px 4px 12px;font-size:.75rem}.nav strong{display:block;font-size:1.1rem;margin-bottom:2px}.nav.active{color:var(--accent)}
+.answer{font-size:1.18rem;font-weight:900;color:var(--accent);margin-top:10px}
+.notice{font-size:.85rem;color:var(--muted);margin-top:10px}
+@media(max-width:520px){.grid,.controls{grid-template-columns:1fr}.hero h1{font-size:1.45rem}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="top">
+    <div>
+      <div class="brand">FIELD <span>TRIG</span></div>
+      <div class="sub">Practical math for layout, grade & construction</div>
+    </div>
+    <div class="tag" id="xp">0 XP</div>
+  </div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+  <div class="card hero">
+    <div class="kicker">Course 1 · Foundations</div>
+    <h1>Learn trig by using it.</h1>
+    <p>No textbook-only math. Every lesson connects the triangle to something you can measure, lay out, build, stripe, or check in the field.</p>
+    <div class="row">
+      <button class="btn" id="continueBtn">Continue Lesson</button>
+      <button class="btn secondary" id="labBtn">Triangle Lab</button>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="notice">Progress: <span id="progressText">14%</span></div>
+  </div>
+
+  <div class="grid">
+    <div class="stat"><span class="muted">Current lesson</span><b>Right Triangles</b></div>
+    <div class="stat"><span class="muted">Field skill</span><b>Square a layout</b></div>
+  </div>
+
+  <div class="card">
+    <b>Course Roadmap</b>
+    <div class="lesson"><div class="badge">1</div><div class="meta"><b>Right Triangles & Squaring</b><span>Diagonals, 3-4-5, Pythagorean theorem</span></div><div class="tag">START</div></div>
+    <div class="lesson"><div class="badge">2</div><div class="meta"><b>Angles & Degrees</b><span>30°, 45°, 60° and field layout</span></div></div>
+    <div class="lesson"><div class="badge">3</div><div class="meta"><b>SOH-CAH-TOA</b><span>Sine, cosine and tangent</span></div></div>
+    <div class="lesson"><div class="badge">4</div><div class="meta"><b>Slope & Grade</b><span>Rise/run, percent grade and drainage</span></div></div>
+    <div class="lesson"><div class="badge">5</div><div class="meta"><b>Construction Layout</b><span>Roofs, parking spaces and offsets</span></div></div>
+    <div class="lesson"><div class="badge">6</div><div class="meta"><b>Circles, Arcs & Radius</b><span>Chord, sagitta and practical curves</span></div></div>
+  </div>
+</section>
+
+<section id="lesson" class="screen">
+  <div class="card">
+    <div class="kicker">Lesson 1</div>
+    <h2>Right triangles are everywhere</h2>
+    <p class="muted">Goal: understand why a diagonal can prove a rectangle is square.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 500 270">
+        <line x1="70" y1="220" x2="400" y2="220" stroke="#f6f8fb" stroke-width="5"/>
+        <line x1="70" y1="220" x2="70" y2="65" stroke="#f6f8fb" stroke-width="5"/>
+        <line x1="70" y1="65" x2="400" y2="220" stroke="#f2b84b" stroke-width="6"/>
+        <rect x="70" y="190" width="30" height="30" fill="none" stroke="#9ba7b6" stroke-width="3"/>
+        <text x="210" y="248" fill="#9ba7b6" font-size="20">RUN</text>
+        <text x="22" y="150" fill="#9ba7b6" font-size="20" transform="rotate(-90 22 150)">RISE</text>
+        <text x="235" y="118" fill="#f2b84b" font-size="18" transform="rotate(25 235 118)">HYPOTENUSE</text>
+      </svg>
+    </div>
+    <p>The two straight sides meet at 90°. The diagonal is the <b>hypotenuse</b>.</p>
+    <div class="formula">a² + b² = c²</div>
+    <div class="tip"><b>Job-site meaning:</b> If your measured diagonal matches the calculated diagonal, your corner is square.</div>
+  </div>
+
+  <div class="card">
+    <h3>Try a 12' × 20' layout</h3>
+    <p>What should the diagonal be?</p>
+    <div class="formula">12² + 20² = c²<br>144 + 400 = 544<br>c = √544</div>
+    <button class="btn" id="revealBtn">Show Answer</button>
+    <div id="diagAnswer" class="answer"></div>
+  </div>
+
+  <div class="card">
+    <div class="kicker">Hands-on assignment</div>
+    <h3>Square a 12' × 20' rectangle</h3>
+    <p>Set a 12' side and a 20' side. Adjust the corner until the diagonal is about <b>23' 3⅞"</b>. Check the opposite diagonal. When both match, the rectangle is square.</p>
+    <button class="btn secondary" id="completeBtn">Mark Complete +50 XP</button>
+    <div id="completeMsg" class="notice"></div>
+  </div>
+</section>
+
+<section id="lab" class="screen">
+  <div class="card">
+    <div class="kicker">Interactive Tool</div>
+    <h2>Triangle Lab</h2>
+    <p class="muted">Change the rise and run. The triangle and calculations update instantly.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 500 300">
+        <line id="baseLine" x1="70" y1="240" x2="420" y2="240" stroke="#f6f8fb" stroke-width="5"/>
+        <line id="riseLine" x1="70" y1="240" x2="70" y2="90" stroke="#f6f8fb" stroke-width="5"/>
+        <line id="hypLine" x1="70" y1="90" x2="420" y2="240" stroke="#f2b84b" stroke-width="6"/>
+      </svg>
+    </div>
+    <div class="controls">
+      <div><label>Run (ft)</label><input id="runInput" type="number" value="20" min="1" step="0.5"></div>
+      <div><label>Rise (ft)</label><input id="riseInput" type="number" value="3" min="0.1" step="0.25"></div>
+    </div>
+    <div class="grid" style="margin-top:12px">
+      <div class="stat"><span class="muted">Hypotenuse</span><b id="hypValue">20.22 ft</b></div>
+      <div class="stat"><span class="muted">Angle</span><b id="angleValue">8.53°</b></div>
+      <div class="stat"><span class="muted">Grade</span><b id="gradeValue">15.0%</b></div>
+      <div class="stat"><span class="muted">Tangent</span><b id="tanValue">0.150</b></div>
+    </div>
+    <div class="tip" id="labText" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<section id="practice" class="screen">
+  <div class="card">
+    <div class="kicker">Practice</div>
+    <h2>Check your understanding</h2>
+    <div id="quizBox"></div>
+  </div>
+</section>
+</main>
+</div>
+
+<div class="bottom">
+  <div class="inner">
+    <button class="nav active" data-screen="home"><strong>⌂</strong>Home</button>
+    <button class="nav" data-screen="lesson"><strong>▤</strong>Lesson</button>
+    <button class="nav" data-screen="lab"><strong>△</strong>Lab</button>
+    <button class="nav" data-screen="practice"><strong>✓</strong>Practice</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var xp = parseInt(localStorage.getItem('fieldTrigXP') || '0',10);
+  var assignmentDone = localStorage.getItem('fieldTrigAssignment1') === 'done';
+  var qIndex = 0;
+
+  function setXP(v){
+    xp=v;
+    localStorage.setItem('fieldTrigXP',String(xp));
+    document.getElementById('xp').textContent=xp+' XP';
+  }
+  function showScreen(id){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav').forEach(function(b){
+      b.classList.toggle('active',b.getAttribute('data-screen')===id);
+    });
+    if(id==='practice') renderQuiz();
+    window.scrollTo(0,0);
+  }
+
+  document.querySelectorAll('.nav').forEach(function(b){
+    b.addEventListener('click',function(){showScreen(b.getAttribute('data-screen'))});
+  });
+  document.getElementById('continueBtn').addEventListener('click',function(){showScreen('lesson')});
+  document.getElementById('labBtn').addEventListener('click',function(){showScreen('lab')});
+  document.getElementById('revealBtn').addEventListener('click',function(){
+    document.getElementById('diagAnswer').textContent='23.324 ft ≈ 23′ 3⅞″';
+  });
+  document.getElementById('completeBtn').addEventListener('click',function(){
+    if(!assignmentDone){
+      assignmentDone=true;
+      localStorage.setItem('fieldTrigAssignment1','done');
+      setXP(xp+50);
+      document.getElementById('progressBar').style.width='22%';
+      document.getElementById('progressText').textContent='22%';
+    }
+    document.getElementById('completeMsg').textContent='Assignment recorded.';
+  });
+
+  function updateTriangle(){
+    var run=Math.max(1,parseFloat(document.getElementById('runInput').value)||1);
+    var rise=Math.max(.1,parseFloat(document.getElementById('riseInput').value)||.1);
+    var hyp=Math.sqrt(run*run+rise*rise);
+    var ang=Math.atan(rise/run)*180/Math.PI;
+    var grade=rise/run*100;
+    document.getElementById('hypValue').textContent=hyp.toFixed(2)+' ft';
+    document.getElementById('angleValue').textContent=ang.toFixed(2)+'°';
+    document.getElementById('gradeValue').textContent=grade.toFixed(1)+'%';
+    document.getElementById('tanValue').textContent=(rise/run).toFixed(3);
+    document.getElementById('labText').textContent='A '+rise+' ft rise over a '+run+' ft run equals a '+grade.toFixed(1)+'% grade and an angle of '+ang.toFixed(2)+'°.';
+
+    var x2=70+Math.min(350,350*run/40);
+    var y2=240-Math.min(170,170*rise/20);
+    document.getElementById('baseLine').setAttribute('x2',x2);
+    document.getElementById('riseLine').setAttribute('y2',y2);
+    document.getElementById('hypLine').setAttribute('y1',y2);
+    document.getElementById('hypLine').setAttribute('x2',x2);
+  }
+  document.getElementById('runInput').addEventListener('input',updateTriangle);
+  document.getElementById('riseInput').addEventListener('input',updateTriangle);
+
+  var quiz=[
+    {q:'A right triangle has legs of 3 ft and 4 ft. What is the hypotenuse?',c:['5 ft','6 ft','7 ft'],a:0,w:'3² + 4² = 25, and √25 = 5.'},
+    {q:'A 12 ft × 20 ft rectangle is square when both diagonals are:',c:['Different lengths','The same length','Exactly 20 ft'],a:1,w:'A rectangle has equal diagonals.'},
+    {q:'If rise is 3 ft and run is 20 ft, the grade is:',c:['6.7%','15%','23%'],a:1,w:'Grade = rise ÷ run × 100 = 15%.'}
+  ];
+
+  function renderQuiz(){
+    var box=document.getElementById('quizBox');
+    if(qIndex>=quiz.length){
+      box.innerHTML='<div class="answer">Practice complete.</div><p class="notice">You finished all three questions.</p><button class="btn" id="restartQuiz">Restart</button>';
+      document.getElementById('restartQuiz').addEventListener('click',function(){qIndex=0;renderQuiz()});
+      return;
+    }
+    var item=quiz[qIndex];
+    var html='<div class="notice">Question '+(qIndex+1)+' of '+quiz.length+'</div><p><b>'+item.q+'</b></p>';
+    item.c.forEach(function(c,i){html+='<button class="choice" data-i="'+i+'">'+c+'</button>'});
+    html+='<div id="feedback" class="notice"></div>';
+    box.innerHTML=html;
+    box.querySelectorAll('.choice').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var i=parseInt(btn.getAttribute('data-i'),10);
+        box.querySelectorAll('.choice').forEach(function(x){x.disabled=true});
+        if(i===item.a){
+          btn.classList.add('correct');
+          setXP(xp+10);
+          document.getElementById('feedback').innerHTML='Correct. '+item.w+'<br><br><button class="btn" id="nextQ">Next Question</button>';
+        }else{
+          btn.classList.add('wrong');
+          box.querySelectorAll('.choice')[item.a].classList.add('correct');
+          document.getElementById('feedback').innerHTML='Not quite. '+item.w+'<br><br><button class="btn" id="nextQ">Next Question</button>';
+        }
+        document.getElementById('nextQ').addEventListener('click',function(){qIndex++;renderQuiz()});
+      });
+    });
+  }
+
+  setXP(xp);
+  updateTriangle();
+  if(assignmentDone){
+    document.getElementById('completeMsg').textContent='Assignment recorded.';
+    document.getElementById('progressBar').style.width='22%';
+    document.getElementById('progressText').textContent='22%';
+  }
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('./sw.js').catch(function(){});
+    });
+  }
+})();
+</script>
+</body>
+</html>

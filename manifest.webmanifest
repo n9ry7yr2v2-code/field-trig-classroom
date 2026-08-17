@@ -1,0 +1,9 @@
+{
+  "name": "Field Trig Classroom",
+  "short_name": "Field Trig",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#11151b",
+  "description": "Practical trigonometry for construction, layout, slope, grade, and field work."
+}
